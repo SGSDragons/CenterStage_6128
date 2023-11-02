@@ -118,6 +118,16 @@ android {
         jniLibs.srcDir rootProject.file('libs')
     }
     ndkVersion '21.3.6528147'
+
+    testOptions {
+        unitTests.includeAndroidResources = true
+        unitTests.all {
+            reports {
+                junitXml.enabled = true
+                html.enabled = true
+            }
+        }
+    }
 }
 
 repositories {
