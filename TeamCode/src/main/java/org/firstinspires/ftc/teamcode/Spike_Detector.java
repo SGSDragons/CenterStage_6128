@@ -2,6 +2,8 @@ package org.firstinspires.ftc.teamcode;
 
 import android.graphics.Canvas;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
 import org.firstinspires.ftc.vision.VisionProcessor;
 import org.opencv.core.Core;
@@ -11,11 +13,11 @@ import org.opencv.core.Size;
 import org.opencv.imgproc.Imgproc;
 
 public class Spike_Detector implements VisionProcessor {
-    final double hue;
-    final double saturation;
-    final double luminosity;
+    private final double hue;
+    private final double saturation;
+    private final double luminosity;
 
-    int correctSpike = 0;
+    private  int correctSpike = 0;
 
     public Spike_Detector(double hue, double saturation, double luminosity) {
         this.hue = hue;
