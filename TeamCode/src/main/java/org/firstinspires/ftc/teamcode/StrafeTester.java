@@ -3,6 +3,8 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
+
 @TeleOp(name = "StrafeTest", group="TEST")
 public class StrafeTester extends LinearOpMode {
 
@@ -13,8 +15,9 @@ public class StrafeTester extends LinearOpMode {
 
         waitForStart();
         while (opModeIsActive()) {
-            if (gamepad1.dpad_left) driver.strafe(-50);
-            if (gamepad1.dpad_right) driver.strafe(50);
+            double heading = driver.imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+            if (gamepad1.dpad_left) driver.strafe(-50, (int)heading);
+            if (gamepad1.dpad_right) driver.strafe(50, (int)heading);
         }
     }
 }

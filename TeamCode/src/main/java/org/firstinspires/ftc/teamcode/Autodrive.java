@@ -25,7 +25,7 @@ public class Autodrive {
     private final DcMotor rightFrontDrive;
     private final DcMotor rightBackDrive;
 
-    private final IMU imu;
+    public final IMU imu;
 
     public static int TICKS_PER_INCH = 40;
 
@@ -64,7 +64,7 @@ public class Autodrive {
         imu.resetYaw();
     }
 
-    public void drive(int distanceInches) {
+    public void drive(int distanceInches, int direction) {
         int ticksDistance = 4* (distanceInches * TICKS_PER_INCH);
 
         final int startingPosition =
@@ -91,7 +91,9 @@ public class Autodrive {
             }
             axial = Math.min(0.7, axial);
 
-            stuff(axial, 0, 0);
+            double yawCorrection = turnGain*(direction-imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+
+            stuff(axial, 0, yawCorrection);
 
             int currentPos =
                             leftBackDrive.getCurrentPosition() +
@@ -140,7 +142,7 @@ public class Autodrive {
         stuff(0, 0, 0);
     }
 
-    public void strafe(int distanceInches) {
+    public void strafe(int distanceInches, int direction) {
         int ticksDistance = 4* (distanceInches * TICKS_PER_INCH);
 
         final int startingPosition =
@@ -166,9 +168,9 @@ public class Autodrive {
             if (adjust > 1.0) {
                 lateral *= adjust;
             }
-            lateral = Math.min(0.7, lateral);
+            lateral = Math.min(0.5, lateral);
 
-            double yawCorrection = -turnGain*imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+            double yawCorrection = turnGain*(direction-imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
 
             stuff(0, lateral, yawCorrection);
 

@@ -131,7 +131,7 @@ public class BasicOmniOpMode_Linear extends LinearOpMode {
         imu.resetYaw();
 
         Autodrive driver = new Autodrive(leftFrontDrive, leftBackDrive, rightFrontDrive, rightBackDrive, imu);
-        driver.drive(36);
+        driver.drive(36, 0);
         driver.turn(90);
 
         // run until the end of the match (driver presses STOP)
