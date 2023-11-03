@@ -12,7 +12,7 @@ import java.io.FileInputStream;
 import java.io.FileOutputStream;
 import java.util.Properties;
 
-//@Autonomous(name = "frontstage_blue")
+//@Autonomous(name = "backstage_red")
 @TeleOp(name = "backstage_red")
 @Config
 
@@ -56,9 +56,9 @@ public class backstage_red extends LinearOpMode {
         intake = hardwareMap.get(DcMotor.class,"intake");
         conveyor = hardwareMap.get(DcMotor.class,"conveyor");
 
-        //boolean isRed = true;
+        //boolean isBlue = false;
 
-        //Spike_Det detector = new Spike_Det(isRed);
+        //Spike_Det detector = new Spike_Det(isBlue);
 
         //VisionPortal visionPortal = VisionPortal.easyCreateWithDefaults(
         //hardwareMap.get(WebcamName.class, "webcam"),

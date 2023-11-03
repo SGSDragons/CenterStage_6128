@@ -160,15 +160,19 @@ public class Autodrive {
         while (keepRunning.get() && Math.abs(error) > TICKS_PER_INCH ) {
             double lateral = error * DriveGain;
 
-            // If the magnitude of axial power is less than the min drive power,
+            // If the magnitude of lateral power is less than the min drive power,
             // then adjust will be greater than 1.0. Scale without changing
             // it's sign to ensure it's strong enough.
             // If scale is less than 1, then don't make the power any weaker.
             double adjust = MIN_POWER_TO_MOVE / Math.abs(lateral);
             if (adjust > 1.0) {
-                lateral *= adjust;
+                lateral = lateral * adjust;
             }
-            lateral = Math.min(0.5, lateral);
+
+            adjust = 0.5 / Math.abs(lateral);
+            if (adjust < 1.0) {
+                lateral = lateral * adjust;
+            }
 
             double yawCorrection = turnGain*(direction-imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
 
