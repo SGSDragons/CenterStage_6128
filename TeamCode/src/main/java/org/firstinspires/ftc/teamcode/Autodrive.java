@@ -4,6 +4,7 @@ import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.IMU;
 
@@ -30,7 +31,7 @@ public class Autodrive {
 
     public static double MIN_POWER_TO_MOVE = 0.2;
 
-    public static double turnGain =-0.02;
+    public static double turnGain =-0.01;
 
     public static double DriveGain = 0.0005;
 
@@ -49,17 +50,18 @@ public class Autodrive {
 
     public Autodrive(HardwareMap hardwareMap, Supplier<Boolean> keepRunning) {
         imu = hardwareMap.get(IMU.class, "imu");
-        leftFrontDrive  = hardwareMap.get(DcMotor.class, "leftfront");
-        leftBackDrive  = hardwareMap.get(DcMotor.class, "leftback");
-        rightFrontDrive = hardwareMap.get(DcMotor.class, "rightfront");
-        rightBackDrive = hardwareMap.get(DcMotor.class, "rightback");
+        leftFrontDrive  = hardwareMap.get(DcMotor.class, "frontleft");
+        leftBackDrive  = hardwareMap.get(DcMotor.class, "backleft");
+        rightFrontDrive = hardwareMap.get(DcMotor.class, "frontright");
+        rightBackDrive = hardwareMap.get(DcMotor.class, "backright");
 
-        leftFrontDrive.setDirection(DcMotor.Direction.REVERSE);
-        leftBackDrive.setDirection(DcMotor.Direction.REVERSE);
+        leftFrontDrive.setDirection(DcMotor.Direction.FORWARD);
+        leftBackDrive.setDirection(DcMotor.Direction.FORWARD);
         rightFrontDrive.setDirection(DcMotor.Direction.FORWARD);
-        rightBackDrive.setDirection(DcMotor.Direction.FORWARD);
+        rightBackDrive.setDirection(DcMotor.Direction.REVERSE);
 
         this.keepRunning = keepRunning;
+        imu.resetYaw();
     }
 
     public void drive(int distanceInches) {
@@ -87,6 +89,8 @@ public class Autodrive {
             if (adjust > 1.0) {
                 axial *= adjust;
             }
+            axial = Math.min(0.7, axial);
+
             stuff(axial, 0, 0);
 
             int currentPos =
@@ -108,7 +112,6 @@ public class Autodrive {
     }
 
     public void turn(final double degrees) {
-        imu.resetYaw();
 
         double error = degrees - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
 
@@ -137,6 +140,60 @@ public class Autodrive {
         stuff(0, 0, 0);
     }
 
+    public void strafe(int distanceInches) {
+        int ticksDistance = 4* (distanceInches * TICKS_PER_INCH);
+
+        final int startingPosition =
+                        -leftBackDrive.getCurrentPosition() +
+                        rightBackDrive.getCurrentPosition() +
+                        leftFrontDrive.getCurrentPosition() +
+                        -rightFrontDrive.getCurrentPosition();
+
+//        imu.resetYaw();
+        int targetPosition = startingPosition + ticksDistance;
+
+        int error = targetPosition - startingPosition;
+
+        // Stop when roughly within one quarter of an inch.
+        while (keepRunning.get() && Math.abs(error) > TICKS_PER_INCH ) {
+            double lateral = error * DriveGain;
+
+            // If the magnitude of axial power is less than the min drive power,
+            // then adjust will be greater than 1.0. Scale without changing
+            // it's sign to ensure it's strong enough.
+            // If scale is less than 1, then don't make the power any weaker.
+            double adjust = MIN_POWER_TO_MOVE / Math.abs(lateral);
+            if (adjust > 1.0) {
+                lateral *= adjust;
+            }
+            lateral = Math.min(0.7, lateral);
+
+            double yawCorrection = -turnGain*imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+
+            stuff(0, lateral, yawCorrection);
+
+            int currentPos =
+                            -leftBackDrive.getCurrentPosition() +
+                            rightBackDrive.getCurrentPosition() +
+                            leftFrontDrive.getCurrentPosition() +
+                            -rightFrontDrive.getCurrentPosition();
+
+            error = targetPosition - currentPos;
+
+            TelemetryPacket stats = new TelemetryPacket();
+            stats.put("Target", targetPosition);
+            stats.put("Current", currentPos);
+            stats.put("Lateral", error);
+            FtcDashboard.getInstance().sendTelemetryPacket(stats);
+            //positive value goes right
+
+        }
+
+        // Stop the motors. We made it.
+        stuff(0, 0, 0);
+    }
+
+
     public void stuff(double axial, double lateral, double yaw) {
         double leftFrontPower  = axial + lateral + yaw;
         double rightFrontPower = axial - lateral - yaw;
@@ -162,6 +219,7 @@ public class Autodrive {
         leftBackDrive.setPower(leftBackPower);
         rightBackDrive.setPower(rightBackPower);
     }
+
 
 
 }
