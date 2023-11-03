@@ -142,8 +142,8 @@ public class Autodrive {
         stuff(0, 0, 0);
     }
 
-    public void strafe(int distanceInches, int direction) {
-        int ticksDistance = 4* (distanceInches * TICKS_PER_INCH);
+    public void strafe(double distanceInches, int direction) {
+        int ticksDistance = (int)(4* (distanceInches * TICKS_PER_INCH));
 
         final int startingPosition =
                         -leftBackDrive.getCurrentPosition() +
