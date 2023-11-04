@@ -50,7 +50,7 @@ public class SpikeDetector implements VisionProcessor {
     @Override
     public Object processFrame(Mat bgr, long captureTimeNanos) {
 
-        Mat cropbgr = bgr.rowRange(100,250);
+        Mat cropbgr = bgr.rowRange(100, 250);
 
         Mat hsv = new Mat();
         Mat blackwhite = new Mat();
@@ -81,9 +81,9 @@ public class SpikeDetector implements VisionProcessor {
             }
         }
 
-        if (highcolumn <= box.cols() * 1/3) {
+        if (highcolumn <= box.cols() * 1 / 3) {
             column1 += 1;
-        } else if (highcolumn <= box.cols() * 2/3) {
+        } else if (highcolumn <= box.cols() * 2 / 3) {
             column2 += 1;
         } else {
             column3 += 1;
@@ -93,13 +93,13 @@ public class SpikeDetector implements VisionProcessor {
 
     }
 
-    public int getSpikecolumn(){
+    public int getSpikecolumn() {
         int bestspikecolumn = 0;
         if (column1 > 3 && column1 > column2 && column1 > column3) {
-          bestspikecolumn = 1;
+            bestspikecolumn = 1;
         } else if (column2 > 3 && column2 > column1 && column2 > column3) {
             bestspikecolumn = 2;
-        } else if (column3 > 3 && column3 > column1 && column3 > column2){
+        } else if (column3 > 3 && column3 > column1 && column3 > column2) {
             bestspikecolumn = 3;
         }
         return bestspikecolumn;
@@ -112,7 +112,8 @@ public class SpikeDetector implements VisionProcessor {
     }
 
     @Override
-    public void onDrawFrame(Canvas canvas, int onscreenWidth, int onscreenHeight, float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext) {
+    public void onDrawFrame (Canvas canvas,int onscreenWidth, int onscreenHeight,
+    float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext){
 
     }
 }
