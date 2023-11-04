@@ -9,8 +9,7 @@ import com.qualcomm.robotcore.hardware.DcMotor;
 import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.vision.VisionPortal;
 
-//@Autonomous(name = "frontstage_red")
-@TeleOp(name = "frontstage_red")
+@Autonomous(name = "frontstage_red")
 @Config
 public class frontstage_red extends RedAutonomous {
     public static int DRIVE_SOUTH = 110;

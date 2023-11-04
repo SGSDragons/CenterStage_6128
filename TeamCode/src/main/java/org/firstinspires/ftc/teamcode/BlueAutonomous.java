@@ -14,9 +14,9 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 import java.util.Optional;
 
 @Config
-abstract class RedAutonomous extends LinearOpMode {
-    final int SOUTH = -90;
-    final int NORTH = 90;
+abstract class BlueAutonomous extends LinearOpMode {
+    final int SOUTH = 90;
+    final int NORTH = -90;
 
     public Autodrive driver;
     DcMotor intake;
@@ -25,14 +25,14 @@ abstract class RedAutonomous extends LinearOpMode {
     AprilTagProcessor april;
 
     @Config
-    public static class RED_S1 {
+    public static class BLUE_S1 {
 
         public static int first_drive = 40;
         public static int second_drive = 35;
     }
 
     @Config
-    public static class RED_S2 {
+    public static class BLUE_S2 {
         public static int first_drive = 65;
         public static int second_drive = 10;
     }
@@ -85,35 +85,35 @@ abstract class RedAutonomous extends LinearOpMode {
     }
 
     void spike1() {
-        driver.drive(RED_S1.first_drive, 0); //drives to middle section
-        driver.turn(SOUTH); //turns to left spike
-        driver.drive(-8, SOUTH); //backs closer to spike (maybe not needed)
-        intake.setPower(-1);//feeder spits out pixel
-        sleep(1000); //waits so that pixel comes out smoothly
-        intake.setPower(0);
-        driver.drive(5, SOUTH); //goes back to previous area
-        driver.turn(0); //turns to the middle of field
-        driver.drive(RED_S1.second_drive, 0); //drives up to the raising area
-    }
-
-    void spike2() {
-        driver.drive(RED_S2.first_drive, 0); //driving through the middle spike
-        intake.setPower(-1);//spits out pixel
-        sleep(1000); //waits so that pixel comes out smoothly
-        intake.setPower(0);
-        driver.drive(RED_S2.second_drive, 0); //drive out of the way of the bar
-    }
-
-    void spike3() {
-        driver.drive(RED_S1.first_drive, 0); //drives to middle section
-        driver.turn(NORTH); //turns to right spike
+        driver.drive(BLUE_S1.first_drive, 0); //drives to middle section
+        driver.turn(NORTH); //turns to left spike
         driver.drive(-8, NORTH); //backs closer to spike (maybe not needed)
         intake.setPower(-1);//feeder spits out pixel
         sleep(1000); //waits so that pixel comes out smoothly
         intake.setPower(0);
         driver.drive(10, NORTH); //goes back to previous area
         driver.turn(0); //turns to the middle of field
-        driver.drive(RED_S1.second_drive, 0); //drives up to the raising area
+        driver.drive(BLUE_S1.second_drive, 0); //drives up to the raising area
+    }
+
+    void spike2() {
+        driver.drive(BLUE_S2.first_drive, 0); //driving through the middle spike
+        intake.setPower(-1);//spits out pixel
+        sleep(1000); //waits so that pixel comes out smoothly
+        intake.setPower(0);
+        driver.drive(BLUE_S2.second_drive, 0); //drive out of the way of the bar
+    }
+
+    void spike3() {
+        driver.drive(BLUE_S1.first_drive, 0); //drives to middle section
+        driver.turn(SOUTH); //turns to right spike
+        driver.drive(-8, SOUTH); //backs closer to spike (maybe not needed)
+        intake.setPower(-1);//feeder spits out pixel
+        sleep(1000); //waits so that pixel comes out smoothly
+        intake.setPower(0);
+        driver.drive(5, SOUTH); //goes back to previous area
+        driver.turn(0); //turns to the middle of field
+        driver.drive(BLUE_S1.second_drive, 0); //drives up to the raising area
     }
 
     void driveBackdrop(int tagId) {

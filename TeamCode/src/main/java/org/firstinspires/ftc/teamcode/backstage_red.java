@@ -6,7 +6,6 @@ import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 
 @Autonomous(name = "backstage_red")
-//@TeleOp(name = "backstage_red")
 @Config
 public class backstage_red extends RedAutonomous {
     public static int DRIVE_SOUTH = 30;
