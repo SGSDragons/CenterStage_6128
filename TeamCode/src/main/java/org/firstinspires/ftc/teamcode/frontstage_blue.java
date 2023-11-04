@@ -52,64 +52,46 @@ public class frontstage_blue extends LinearOpMode {
         intake = hardwareMap.get(DcMotor.class,"intake");
         conveyor = hardwareMap.get(DcMotor.class,"conveyor");
 
-        //boolean isBlue = true;
+        int correctSpike = 0;
 
-        //Spike_Det detector = new Spike_Det(isBlue);
+        SpikeDetector spike = new SpikeDetector();
 
-        //VisionPortal visionPortal = VisionPortal.easyCreateWithDefaults(
-                //hardwareMap.get(WebcamName.class, "webcam"),
-                //detector);
+        VisionPortal visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "webcam"),spike);
+        visionPortal.resumeStreaming();
 
-            //visionPortal.resumeStreaming();
-            //int correctSpike = 0;
+        waitForStart();
 
-            //while(correctSpike == 0) {
-            //correctSpike = detector.getCorrectSpike();
-            //}
-
-            //visionPortal.stopStreaming();
-
-            //sleep(2000);
-
-        // For left spike autonomous instructions. For strafe, positive values make it go right
-        //if (correctSpike == 1)
-        while (opModeIsActive()) {
-            if (gamepad1.dpad_left) {
+        if (gamepad1.dpad_left) {
             driver.turn(90);
         }
-            if (gamepad1.dpad_up) {
-                driver.turn(0);
-            }
-            if (gamepad1.dpad_right) {
-                driver.turn(-90);
-            }
-            if (gamepad1.dpad_down) {
-                driver.turn(180);
-            }
-            if (gamepad1.x) {
-                spike1(driver, -90, -3);
-            }
-
-            // For middle spike autonomous instructions.
-            //if (correctSpike == 2)
-            if (gamepad1.y) {
-                spike2(driver);
-            }
-            // For right spike autonomous instructions.
-            //if (correctSpike == 3)
-            if (gamepad1.b) {
-                spike3(driver, 90, 3);
-            }
+        if (gamepad1.dpad_up) {
+            driver.turn(0);
         }
-        // Now we continue on with the autonomous driving instructions to get the robot
-        // through the middle racks, then over to the correct backdrop to read April Tags.
+        if (gamepad1.dpad_right) {
+            driver.turn(-90);
+        }
+        if (gamepad1.dpad_down) {
+            driver.turn(180);
+        }
+        if (spike.getSpikecolumn() == 1) {
+            //if (gamepad1.x) {
+            spike1(driver, -90, -3);
+        }
 
-        //if (correctSpike == 1) {
-            //driver.turn(90);
-            //driver.drive(18);
-       //}
+        // For middle spike autonomous instructions.
+        if (spike.getSpikecolumn() == 2) {
+            //if (gamepad1.y) {
+            spike2(driver);
+        }
+        // For right spike autonomous instructions.
+        if (spike.getSpikecolumn() == 3){
+            //if (gamepad1.b)
+            spike3(driver, 90, 3);
+        }
 
     }
+
+
     private void spike1(Autodrive driver, int degrees, int degrees1) {
         driver.drive(FB_S1.first_drive, 0); //drives to middle section
         driver.turn(degrees); //turns to left spike

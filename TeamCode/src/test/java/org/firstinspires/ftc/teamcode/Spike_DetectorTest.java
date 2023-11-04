@@ -20,19 +20,59 @@ public class Spike_DetectorTest extends TestCase {
     @Test
     public void testpic() {
 
-        int spike = 1;
-        String file = "red"+spike+".png";
+        int num = 3;
+        String color = "red";
+        String file = color+num+".png";
+
+        double h = 0;
+        double s = 0;
+        double v = 0;
+
+        if (color == "blue"){
+            h = 19;
+            s = 200;
+            v = 150;
+        }else if (color == "red"){
+            h = 120;
+            s = 196;
+            v = 176;
+        }
 
         Mat rgb = Imgcodecs.imread(file);
-        Mat bgr = new Mat();
+        Mat hsv = new Mat();
+        Mat blackwhite = new Mat();
+        Mat box = new Mat();
 
-        Imgproc.cvtColor(rgb, bgr, Imgproc.COLOR_RGB2BGR);
+        Imgproc.cvtColor(rgb, hsv, Imgproc.COLOR_RGB2HSV);
 
-        SpikeDetector detector = new SpikeDetector();
-        detector.processFrame(bgr, 1);
+        Scalar min = new Scalar(Math.max(0, h - 10), s - 50, v - 50);
+        Scalar max = new Scalar(h + 10, 255, 255);
 
-        Assert.assertEquals(spike, detector.getSpikecolumn());
+        Core.inRange(hsv, min, max, blackwhite);
+        Imgproc.boxFilter(blackwhite, box, -1, new Size(1, 1));
+        Imgcodecs.imwrite("new.png", blackwhite);
 
+        double xhigh = 0;
+        int highcolumn = 0;
+
+        for (int c = 0; c < box.cols(); c += 1) {
+            for (int r = 0; r < box.rows(); r += 1) {
+                if (box.get(r, c)[0] > xhigh) {
+                    xhigh = box.get(r, c)[0];
+                    highcolumn = c;
+                }
+            }
+        }
+
+        if (highcolumn <= box.cols() * 1/3) {
+            highcolumn = 1;
+        } else if (highcolumn <= box.cols() * 2/3) {
+            highcolumn = 2;
+        } else {
+            highcolumn = 3;
+        }
+
+        Assert.assertEquals(num,highcolumn);
     }
 
 }

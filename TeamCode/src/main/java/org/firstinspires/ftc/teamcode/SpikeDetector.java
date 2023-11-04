@@ -50,11 +50,13 @@ public class SpikeDetector implements VisionProcessor {
     @Override
     public Object processFrame(Mat bgr, long captureTimeNanos) {
 
+        Mat cropbgr = bgr.rowRange(100,250);
+
         Mat hsv = new Mat();
         Mat blackwhite = new Mat();
         Mat box = new Mat();
 
-        Imgproc.cvtColor(bgr, hsv, Imgproc.COLOR_BGR2HSV);
+        Imgproc.cvtColor(cropbgr, hsv, Imgproc.COLOR_BGR2HSV);
 
         double[] target = getTargetHsv();
         double h = 120;
