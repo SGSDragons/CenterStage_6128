@@ -30,23 +30,28 @@ public class SpikeDetector implements VisionProcessor {
     int g = 50;
     int b = 41;
 
+    final double h;
+    final double s;
+    final double v;
+
+    public SpikeDetector(boolean isBlue) {
+        if (isBlue) {
+            // Fill in numbers for blue
+            h = 19;
+            s = 200;
+            v = 150;
+        } else {
+            h = 120;
+            s = 196;
+            v = 176;
+        }
+    }
+
     @Override
     public void init(int width, int height, CameraCalibration calibration) {
 
     }
 
-    double[] getTargetHsv() {
-        Mat sampledRgb = new Mat(1, 1, CvType.CV_8UC3);
-
-        byte[] rgb = new byte[] { (byte)r, (byte)g, (byte)b };
-        sampledRgb.put(0, 0, rgb);
-
-        Mat sampledHsv = new Mat();
-        Imgproc.cvtColor(sampledRgb, sampledHsv, Imgproc.COLOR_RGB2HSV);
-        double[] hsv = sampledHsv.get(0,0);
-        return hsv;
-
-    }
     @Override
     public Object processFrame(Mat bgr, long captureTimeNanos) {
 
@@ -58,10 +63,6 @@ public class SpikeDetector implements VisionProcessor {
 
         Imgproc.cvtColor(cropbgr, hsv, Imgproc.COLOR_BGR2HSV);
 
-        double[] target = getTargetHsv();
-        double h = 120;
-        double s = 196;
-        double v = 176;
 
         Scalar min = new Scalar(Math.max(0, h - 10), s - 50, v - 50);
         Scalar max = new Scalar(h + 10, 255, 255);

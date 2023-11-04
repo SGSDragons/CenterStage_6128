@@ -65,8 +65,8 @@ public class BasicOpMode_Linear extends LinearOpMode {
         rightBackDrive = hardwareMap.get(DcMotor.class, "backright");
         leftFrontDrive = hardwareMap.get(DcMotor.class, "frontleft");
         leftBackDrive = hardwareMap.get(DcMotor.class, "backleft");
-        Feeder = hardwareMap.get(DcMotor.class, "rightarm");
-        Conveyor = hardwareMap.get(DcMotor.class, "leftarm");
+        Feeder = hardwareMap.get(DcMotor.class, "intake");
+        Conveyor = hardwareMap.get(DcMotor.class, "conveyor");
         Launcher = hardwareMap.get(Servo.class, "launcher");
 
         // To drive forward, most robots need the motor on one side to be reversed, because the axles point in opposite directions.
@@ -121,7 +121,7 @@ public class BasicOpMode_Linear extends LinearOpMode {
             Conveyor.setPower(ConveyorPower);
 
             if(gamepad2.y) {
-                Launcher.setPosition(-1);
+                Launcher.setPosition(0);
             }else if(gamepad2.x) {
                 Launcher.setPosition(1);
             }

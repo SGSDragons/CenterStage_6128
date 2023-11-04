@@ -1,5 +1,9 @@
 package org.firstinspires.ftc.teamcode;
 
+import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+
 import junit.framework.TestCase;
 
 import org.junit.Assert;
@@ -11,10 +15,11 @@ import org.opencv.core.Scalar;
 import org.opencv.core.Size;
 import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
-
+import android.util.Log;
 
 import java.io.File;
 
+@TeleOp(name = "Test")
 public class Spike_DetectorTest extends TestCase {
     static { System.loadLibrary("opencv_java480");}
     @Test
@@ -43,6 +48,7 @@ public class Spike_DetectorTest extends TestCase {
         Mat blackwhite = new Mat();
         Mat box = new Mat();
 
+
         Imgproc.cvtColor(rgb, hsv, Imgproc.COLOR_RGB2HSV);
 
         Scalar min = new Scalar(Math.max(0, h - 10), s - 50, v - 50);
@@ -54,12 +60,15 @@ public class Spike_DetectorTest extends TestCase {
 
         double xhigh = 0;
         int highcolumn = 0;
+        int pixelcount = 0;
 
         for (int c = 0; c < box.cols(); c += 1) {
             for (int r = 0; r < box.rows(); r += 1) {
                 if (box.get(r, c)[0] > xhigh) {
                     xhigh = box.get(r, c)[0];
                     highcolumn = c;
+                }if (box.get(r, c)[0] > 0) {
+                    pixelcount += 1;
                 }
             }
         }

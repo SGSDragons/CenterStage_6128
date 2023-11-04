@@ -20,7 +20,7 @@ public class SpikeTest extends LinearOpMode {
     @Override
     public void runOpMode() throws InterruptedException {
 
-        SpikeDetector spike = new SpikeDetector();
+        SpikeDetector spike = new SpikeDetector(true);
 
         VisionPortal visionPortal = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class, "webcam"),spike);
         visionPortal.resumeStreaming();

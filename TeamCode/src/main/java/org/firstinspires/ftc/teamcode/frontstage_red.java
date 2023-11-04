@@ -12,7 +12,7 @@ import org.firstinspires.ftc.vision.VisionPortal;
 @Autonomous(name = "frontstage_red")
 @Config
 public class frontstage_red extends RedAutonomous {
-    public static int DRIVE_SOUTH = 110;
+    public static int DRIVE_SOUTH = 95;
 
     @Override
     public void runOpMode() {

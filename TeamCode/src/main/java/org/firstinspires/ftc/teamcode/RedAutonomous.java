@@ -48,7 +48,7 @@ abstract class RedAutonomous extends LinearOpMode {
         intake = hardwareMap.get(DcMotor.class,"intake");
         conveyor = hardwareMap.get(DcMotor.class,"conveyor");
 
-        SpikeDetector spike = new SpikeDetector();
+        SpikeDetector spike = new SpikeDetector(false);
         april = AprilTagProcessor.easyCreateWithDefaults();
 
         VisionPortal vision = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class,"webcam"), spike, april);

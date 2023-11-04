@@ -37,7 +37,7 @@ abstract class BlueAutonomous extends LinearOpMode {
         public static int second_drive = 10;
     }
 
-    public static int BACKDROP_STRAFE = 40;
+    public static int BACKDROP_STRAFE = -45;
     public static int BACKDROP_DRIVE = 30;
 
     public int driveSpike() {
@@ -48,7 +48,7 @@ abstract class BlueAutonomous extends LinearOpMode {
         intake = hardwareMap.get(DcMotor.class,"intake");
         conveyor = hardwareMap.get(DcMotor.class,"conveyor");
 
-        SpikeDetector spike = new SpikeDetector();
+        SpikeDetector spike = new SpikeDetector(true);
         april = AprilTagProcessor.easyCreateWithDefaults();
 
         VisionPortal vision = VisionPortal.easyCreateWithDefaults(hardwareMap.get(WebcamName.class,"webcam"), spike, april);
