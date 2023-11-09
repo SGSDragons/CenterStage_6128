@@ -37,8 +37,9 @@ abstract class BlueAutonomous extends LinearOpMode {
         public static int second_drive = 10;
     }
 
-    public static int BACKDROP_STRAFE = -45;
+    public static int BACKDROP_STRAFE = -25;
     public static int BACKDROP_DRIVE = 30;
+
 
     public int driveSpike() {
 
@@ -107,11 +108,11 @@ abstract class BlueAutonomous extends LinearOpMode {
     void spike3() {
         driver.drive(BLUE_S1.first_drive, 0); //drives to middle section
         driver.turn(SOUTH); //turns to right spike
-        driver.drive(-8, SOUTH); //backs closer to spike (maybe not needed)
+        driver.drive(-5, SOUTH); //backs closer to spike (maybe not needed)
         intake.setPower(-1);//feeder spits out pixel
         sleep(1000); //waits so that pixel comes out smoothly
         intake.setPower(0);
-        driver.drive(5, SOUTH); //goes back to previous area
+        driver.drive(6, SOUTH); //goes back to previous area
         driver.turn(0); //turns to the middle of field
         driver.drive(BLUE_S1.second_drive, 0); //drives up to the raising area
     }
@@ -120,13 +121,17 @@ abstract class BlueAutonomous extends LinearOpMode {
         driver.strafe(BACKDROP_STRAFE, SOUTH);
         alignWithTag(tagId);
         driver.drive(BACKDROP_DRIVE, SOUTH);
-        conveyor.setPower(0.7);
-        sleep(2000);
+        conveyor.setPower(0.4);
+        sleep(3000);
         conveyor.setPower(0);
+        driver.strafe(35, SOUTH);
     }
 
     void alignWithTag(int tagId) {
-        while (opModeIsActive()) {
+
+        int tries= 0;
+
+        while (opModeIsActive() && tries < 8) {
             Optional<AprilTagDetection> someDetection = april.getDetections()
                     .stream()
                     .filter(d -> d.id == tagId && d.ftcPose != null)
@@ -138,8 +143,12 @@ abstract class BlueAutonomous extends LinearOpMode {
                 if (Math.abs(xshift) < 0.5) return;
                 driver.strafe(xshift, SOUTH);
             }
-
+            else {
+                driver.strafe(-5, SOUTH); continue;
+            }
             sleep(20);
+
+            ++tries;
         }
     }
 }
