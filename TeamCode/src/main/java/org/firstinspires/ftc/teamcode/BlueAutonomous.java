@@ -3,6 +3,7 @@ package org.firstinspires.ftc.teamcode;
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
+import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
 
@@ -13,6 +14,7 @@ import org.firstinspires.ftc.vision.apriltag.AprilTagProcessor;
 
 import java.util.Optional;
 
+@Disabled
 @Config
 abstract class BlueAutonomous extends LinearOpMode {
     final int SOUTH = 90;
@@ -33,12 +35,12 @@ abstract class BlueAutonomous extends LinearOpMode {
 
     @Config
     public static class BLUE_S2 {
-        public static int first_drive = 65;
+        public static int first_drive = 63;
         public static int second_drive = 10;
     }
 
     public static int BACKDROP_STRAFE = -25;
-    public static int BACKDROP_DRIVE = 30;
+    public static int BACKDROP_DRIVE = 32;
 
 
     public int driveSpike() {
@@ -88,11 +90,11 @@ abstract class BlueAutonomous extends LinearOpMode {
     void spike1() {
         driver.drive(BLUE_S1.first_drive, 0); //drives to middle section
         driver.turn(NORTH); //turns to left spike
-        driver.drive(-8, NORTH); //backs closer to spike (maybe not needed)
+        driver.drive(-6, NORTH); //backs closer to spike (maybe not needed)
         intake.setPower(-1);//feeder spits out pixel
         sleep(1000); //waits so that pixel comes out smoothly
         intake.setPower(0);
-        driver.drive(10, NORTH); //goes back to previous area
+        driver.drive(6, NORTH); //goes back to previous area
         driver.turn(0); //turns to the middle of field
         driver.drive(BLUE_S1.second_drive, 0); //drives up to the raising area
     }
@@ -108,7 +110,7 @@ abstract class BlueAutonomous extends LinearOpMode {
     void spike3() {
         driver.drive(BLUE_S1.first_drive, 0); //drives to middle section
         driver.turn(SOUTH); //turns to right spike
-        driver.drive(-5, SOUTH); //backs closer to spike (maybe not needed)
+        driver.drive(-6, SOUTH); //backs closer to spike (maybe not needed)
         intake.setPower(-1);//feeder spits out pixel
         sleep(1000); //waits so that pixel comes out smoothly
         intake.setPower(0);
@@ -121,7 +123,7 @@ abstract class BlueAutonomous extends LinearOpMode {
         driver.strafe(BACKDROP_STRAFE, SOUTH);
         alignWithTag(tagId);
         driver.drive(BACKDROP_DRIVE, SOUTH);
-        conveyor.setPower(0.4);
+        conveyor.setPower(0.5);
         sleep(3000);
         conveyor.setPower(0);
         driver.strafe(35, SOUTH);
@@ -131,7 +133,7 @@ abstract class BlueAutonomous extends LinearOpMode {
 
         int tries= 0;
 
-        while (opModeIsActive() && tries < 8) {
+        while (opModeIsActive() && tries < 20) {
             Optional<AprilTagDetection> someDetection = april.getDetections()
                     .stream()
                     .filter(d -> d.id == tagId && d.ftcPose != null)
@@ -144,7 +146,7 @@ abstract class BlueAutonomous extends LinearOpMode {
                 driver.strafe(xshift, SOUTH);
             }
             else {
-                driver.strafe(-5, SOUTH); continue;
+                driver.strafe(-5, SOUTH);
             }
             sleep(20);
 

@@ -35,6 +35,8 @@ public class Autodrive {
 
     public static double DriveGain = 0.0005;
 
+    public static double StrafeGain = 0.0003;
+
     public static double minturnpower = 0.45;
 
     // By default, keep running
@@ -109,6 +111,8 @@ public class Autodrive {
 
         }
 
+        turn(direction);
+
         // Stop the motors. We made it.
         stuff(0, 0, 0);
     }
@@ -117,7 +121,7 @@ public class Autodrive {
 
         double error = degrees - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
 
-        while ( Math.abs(error)>3  ) {
+        while ( Math.abs(error) > 3  ) {
             double yaw = error * turnGain;
 
             // If the magnitude of yaw power is less than the min turn power,
@@ -129,7 +133,10 @@ public class Autodrive {
                 yaw *= adjust;
             }
 
+            yaw = Math.min(0.7, yaw);
+
             stuff(0, 0, yaw);
+
             error = degrees - imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
 
             TelemetryPacket stats = new TelemetryPacket();
@@ -158,7 +165,7 @@ public class Autodrive {
 
         // Stop when roughly within one quarter of an inch.
         while (keepRunning.get() && Math.abs(error) > TICKS_PER_INCH ) {
-            double lateral = error * DriveGain;
+            double lateral = error * StrafeGain;
 
             // If the magnitude of lateral power is less than the min drive power,
             // then adjust will be greater than 1.0. Scale without changing
@@ -195,6 +202,7 @@ public class Autodrive {
 
         }
 
+        turn(direction);
         // Stop the motors. We made it.
         stuff(0, 0, 0);
     }
