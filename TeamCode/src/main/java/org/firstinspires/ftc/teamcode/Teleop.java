@@ -98,6 +98,7 @@ public class Teleop extends LinearOpMode {
         imu.resetYaw();
 
         double south = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+        double angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
 
         while (opModeIsActive()) {
 
@@ -126,7 +127,12 @@ public class Teleop extends LinearOpMode {
             }
 
             if(gamepad1.b){
-                driver.turn(south-imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES));
+                angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+                if (angle > 0){
+                    driver.turn(angle-angle+south+7);
+                }else if (angle < 0){
+                    driver.turn(angle-angle-south);
+                }
             }
 
             if (max > 1.0) {
