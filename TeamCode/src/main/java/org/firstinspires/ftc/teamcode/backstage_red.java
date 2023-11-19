@@ -29,14 +29,14 @@ public class backstage_red extends LinearOpMode {
     AprilTagProcessor april;
 
     @Config
-    public static class BLUE_S1 {
+    public static class RED_S1 {
 
         public static int first_drive = 40;
         public static int second_drive = 35;
     }
 
     @Config
-    public static class BLUE_S2 {
+    public static class RED_S2 {
         public static int first_drive = 64;
         public static int second_drive = 17;
     }
@@ -95,7 +95,7 @@ public class backstage_red extends LinearOpMode {
     }
 
     void spike1() {
-        driver.drive(BLUE_S1.first_drive, 0); //drives to middle section
+        driver.drive(RED_S1.first_drive, 0); //drives to middle section
         driver.turn(SOUTH); //turns to left spike
         driver.drive(-6, SOUTH); //backs closer to spike (maybe not needed)
         intake.setPower(-1);//feeder spits out pixel
@@ -103,24 +103,24 @@ public class backstage_red extends LinearOpMode {
         intake.setPower(0);
         driver.drive(4, SOUTH); //goes back to previous area
         driver.turn(0); //turns to the middle of field
-        driver.drive(BLUE_S1.second_drive, 0); //drives up to the raising area
+        driver.drive(RED_S1.second_drive, 0); //drives up to the raising area
         driver.turn(SOUTH); //drives forward, closer to backdrop
         driver.drive(32,SOUTH);
     }
 
     void spike2() {
-        driver.drive(BLUE_S2.first_drive, 0); //driving through the middle spike
+        driver.drive(RED_S2.first_drive, 0); //driving through the middle spike
         intake.setPower(-1);//spits out pixel
         sleep(1000); //waits so that pixel comes out smoothly
         intake.setPower(0);
-        driver.drive(BLUE_S2.second_drive, 0); //drive out of the way of the bar
+        driver.drive(RED_S2.second_drive, 0); //drive out of the way of the bar
         driver.turn(SOUTH); //drives forward, closer to backdrop
         driver.drive(31,SOUTH);
 
     }
 
     void spike3() {
-        driver.drive(BLUE_S1.first_drive, 0); //drives to middle section
+        driver.drive(RED_S1.first_drive, 0); //drives to middle section
         driver.turn(NORTH); //turns to right spike
         driver.drive(-6, NORTH); //backs closer to spike (maybe not needed)
         intake.setPower(-1);//feeder spits out pixel
@@ -128,7 +128,7 @@ public class backstage_red extends LinearOpMode {
         intake.setPower(0);
         driver.drive(4, NORTH); //goes back to previous area
         driver.turn(0); //turns to the middle of field
-        driver.drive(BLUE_S1.second_drive, 0); //drives up to the raising area
+        driver.drive(RED_S1.second_drive, 0); //drives up to the raising area
         driver.turn(SOUTH); //drives forward, closer to backdrop
         driver.drive(32,SOUTH);
 
