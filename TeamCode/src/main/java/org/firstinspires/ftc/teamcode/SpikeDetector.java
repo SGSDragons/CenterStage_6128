@@ -1,49 +1,50 @@
 package org.firstinspires.ftc.teamcode;
 
+import android.graphics.Bitmap;
 import android.graphics.Canvas;
+import android.graphics.Rect;
 
-import com.acmerobotics.dashboard.FtcDashboard;
-import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
-import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
-import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
+import com.acmerobotics.dashboard.config.Config;
 
-import org.firstinspires.ftc.robotcore.external.hardware.camera.WebcamName;
 import org.firstinspires.ftc.robotcore.internal.camera.calibration.CameraCalibration;
-import org.firstinspires.ftc.vision.VisionPortal;
 import org.firstinspires.ftc.vision.VisionProcessor;
+import org.opencv.android.Utils;
 import org.opencv.core.Core;
-import org.opencv.core.CvType;
 import org.opencv.core.Mat;
 import org.opencv.core.Scalar;
 import org.opencv.core.Size;
-import org.opencv.imgcodecs.Imgcodecs;
 import org.opencv.imgproc.Imgproc;
 
+@Config
 public class SpikeDetector implements VisionProcessor {
 
     int column1 = 0;
     int column2 = 0;
     int column3 = 0;
 
-    int r = 158;
-    int g = 50;
-    int b = 41;
 
-    final double h;
-    final double s;
-    final double v;
+    public static double hue;
+    public static double saturation;
+    public static double volume;
+
+    public static int cropH = 100;
+    public static int cropL = 250;
+    final double rowCount = 480;
 
     public SpikeDetector(boolean isBlue) {
         if (isBlue) {
             // Fill in numbers for blue
-            h = 19;
-            s = 200;
-            v = 150;
+            hue = 19;
+            saturation = 200;
+            volume = 150;
+
+            //hue = hue
+            //saturation = saturation
+            //volume = volume
         } else {
-            h = 120;
-            s = 196;
-            v = 176;
+            hue = 120;
+            saturation = 196;
+            volume = 176;
         }
     }
 
@@ -52,10 +53,11 @@ public class SpikeDetector implements VisionProcessor {
 
     }
 
+
     @Override
     public Object processFrame(Mat bgr, long captureTimeNanos) {
 
-        Mat cropbgr = bgr.rowRange(100, 250);
+        Mat cropbgr = bgr.rowRange(cropH, cropL);
 
         Mat hsv = new Mat();
         Mat blackwhite = new Mat();
@@ -64,10 +66,10 @@ public class SpikeDetector implements VisionProcessor {
         Imgproc.cvtColor(cropbgr, hsv, Imgproc.COLOR_BGR2HSV);
 
 
-        Scalar min = new Scalar(Math.max(0, h - 10), s - 50, v - 50);
-        Scalar max = new Scalar(h + 10, 255, 255);
+        Scalar min = new Scalar(Math.max(0, hue - 10), saturation - 50, volume - 50);
+        Scalar max = new Scalar(hue + 10, 255, 255);
 
-        Core.inRange(hsv, min, max, blackwhite);
+        Core.inRange(hsv, min, max, blackwhite); //turns the picture to black or white
         Imgproc.boxFilter(blackwhite, box, -1, new Size(31, 31));
 
         double xhigh = 0;
@@ -90,7 +92,7 @@ public class SpikeDetector implements VisionProcessor {
             column3 += 1;
         }
 
-        return null;
+        return blackwhite;
 
     }
 
@@ -112,9 +114,30 @@ public class SpikeDetector implements VisionProcessor {
         column3 = 0;
     }
 
-    @Override
-    public void onDrawFrame (Canvas canvas,int onscreenWidth, int onscreenHeight,
-    float scaleBmpPxToCanvasPx, float scaleCanvasDensity, Object userContext){
 
+    @Override
+    public void onDrawFrame (
+            Canvas canvas,
+            int onscreenWidth,
+            int onscreenHeight,
+            float scaleBmpPxToCanvasPx,
+            float scaleCanvasDensity,
+            Object userContext)  // userContext is the return value from processFrame
+    {
+
+        Mat blackwhite = (Mat)userContext;
+        if (blackwhite.empty()) {
+            return;
+        }
+
+        Bitmap bitmap = Bitmap.createBitmap(blackwhite.cols(), blackwhite.rows(), Bitmap.Config.RGB_565);
+        Utils.matToBitmap(blackwhite, bitmap);
+
+        double canvasTop = cropH/rowCount * onscreenHeight;
+        double canvasBottom = cropL/rowCount * onscreenHeight;
+
+        Rect src = new Rect(0, 0, blackwhite.cols(), blackwhite.rows());
+        Rect dst = new Rect(0, (int)canvasTop,onscreenWidth,(int)canvasBottom);
+        canvas.drawBitmap(bitmap, src, dst, null);
     }
 }
