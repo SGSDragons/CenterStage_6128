@@ -133,6 +133,8 @@ public class SpikeDetector implements VisionProcessor {
         Bitmap bitmap = Bitmap.createBitmap(blackwhite.cols(), blackwhite.rows(), Bitmap.Config.RGB_565);
         Utils.matToBitmap(blackwhite, bitmap);
 
+        //all of this makes the streak in the middle not stretch a lot to make the thing a little bit cleaner
+
         double canvasTop = cropH/rowCount * onscreenHeight;
         double canvasBottom = cropL/rowCount * onscreenHeight;
 
