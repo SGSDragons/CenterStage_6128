@@ -31,7 +31,7 @@ public class backstage_red extends LinearOpMode {
     @Config
     public static class RED_S1 {
 
-        public static int first_drive = 40;
+        public static int first_drive = 45;
         public static int second_drive = 35;
     }
 
@@ -41,8 +41,8 @@ public class backstage_red extends LinearOpMode {
         public static int second_drive = 17;
     }
 
-    public static int BACKDROP_STRAFE = 25;
-    public static int BACKDROP_DRIVE = 31;
+    public static int BACKDROP_STRAFE = 28;
+    public static int BACKDROP_DRIVE = 24;
 
     int targetSpike = 0;
 
@@ -97,11 +97,11 @@ public class backstage_red extends LinearOpMode {
     void spike1() {
         driver.drive(RED_S1.first_drive, 0); //drives to middle section
         driver.turn(SOUTH); //turns to left spike
-        driver.drive(-6, SOUTH); //backs closer to spike (maybe not needed)
+        driver.drive(-7, SOUTH); //backs closer to spike (maybe not needed)
         intake.setPower(-1);//feeder spits out pixel
         sleep(1000); //waits so that pixel comes out smoothly
         intake.setPower(0);
-        driver.drive(4, SOUTH); //goes back to previous area
+        driver.drive(5, SOUTH); //goes back to previous area
         driver.turn(0); //turns to the middle of field
         driver.drive(RED_S1.second_drive, 0); //drives up to the raising area
         driver.turn(SOUTH); //drives forward, closer to backdrop
@@ -115,14 +115,14 @@ public class backstage_red extends LinearOpMode {
         intake.setPower(0);
         driver.drive(RED_S2.second_drive, 0); //drive out of the way of the bar
         driver.turn(SOUTH); //drives forward, closer to backdrop
-        driver.drive(31,SOUTH);
+        driver.drive(30,SOUTH);
 
     }
 
     void spike3() {
         driver.drive(RED_S1.first_drive, 0); //drives to middle section
         driver.turn(NORTH); //turns to right spike
-        driver.drive(-6, NORTH); //backs closer to spike (maybe not needed)
+        driver.drive(-4, NORTH); //backs closer to spike (maybe not needed)
         intake.setPower(-1);//feeder spits out pixel
         sleep(1000); //waits so that pixel comes out smoothly
         intake.setPower(0);
@@ -130,7 +130,7 @@ public class backstage_red extends LinearOpMode {
         driver.turn(0); //turns to the middle of field
         driver.drive(RED_S1.second_drive, 0); //drives up to the raising area
         driver.turn(SOUTH); //drives forward, closer to backdrop
-        driver.drive(32,SOUTH);
+        driver.drive(28,SOUTH);
 
     }
 
@@ -141,6 +141,7 @@ public class backstage_red extends LinearOpMode {
         conveyor.setPower(0.5);
         sleep(3000);
         conveyor.setPower(0);
+        driver.drive(-5, SOUTH);
         driver.strafe(-35, SOUTH);
     }
 
@@ -157,8 +158,8 @@ public class backstage_red extends LinearOpMode {
             if (someDetection.isPresent()) {
                 AprilTagDetection d = someDetection.get();
                 double xshift = d.ftcPose.x;
-                if (Math.abs(xshift) < 1) return;
-                driver.strafe(xshift, SOUTH);
+                if (Math.abs(xshift) < 1);
+                driver.strafe(xshift, SOUTH); return;
             } else {
                 driver.strafe(5, SOUTH);
             }

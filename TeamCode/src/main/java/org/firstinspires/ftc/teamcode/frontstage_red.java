@@ -32,7 +32,7 @@ public class frontstage_red extends LinearOpMode {
     public static class RED_S1 {
 
         public static int first_drive = 40;
-        public static int second_drive = 35;
+        public static int second_drive = 33;
     }
 
     @Config
@@ -41,8 +41,8 @@ public class frontstage_red extends LinearOpMode {
         public static int second_drive = 17;
     }
 
-    public static int BACKDROP_STRAFE = 25;
-    public static int BACKDROP_DRIVE = 31;
+    public static int BACKDROP_STRAFE = 22;
+    public static int BACKDROP_DRIVE = 25;
 
     int targetSpike = 0;
 
@@ -141,6 +141,7 @@ public class frontstage_red extends LinearOpMode {
         conveyor.setPower(0.5);
         sleep(3000);
         conveyor.setPower(0);
+        driver.drive(-5, SOUTH);
         driver.strafe(-35, SOUTH);
     }
 

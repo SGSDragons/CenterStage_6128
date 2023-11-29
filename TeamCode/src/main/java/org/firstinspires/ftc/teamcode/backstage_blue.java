@@ -42,7 +42,7 @@ public class backstage_blue extends LinearOpMode {
     }
 
     public static int BACKDROP_STRAFE = -25;
-    public static int BACKDROP_DRIVE = 32;
+    public static int BACKDROP_DRIVE = 25;
 
     int targetSpike = 0;
 
@@ -141,6 +141,7 @@ public class backstage_blue extends LinearOpMode {
         conveyor.setPower(0.5);
         sleep(3000);
         conveyor.setPower(0);
+        driver.drive(-5, SOUTH);
         driver.strafe(35, SOUTH);
     }
 
@@ -151,7 +152,7 @@ public class backstage_blue extends LinearOpMode {
         while (opModeIsActive() && tries < 20) {
             Optional<AprilTagDetection> someDetection = april.getDetections()
                     .stream()
-                    .filter(d -> d.id == tagId && d.ftcPose != null)
+                    .filter(d -> d.id == (tagId) && d.ftcPose != null)
                     .findFirst();
 
             if (someDetection.isPresent()) {

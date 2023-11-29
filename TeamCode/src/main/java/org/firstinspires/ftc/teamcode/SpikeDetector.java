@@ -25,18 +25,18 @@ public class SpikeDetector implements VisionProcessor {
 
     public static double hue;
     public static double saturation;
-    public static double volume;
+    public static double value;
 
-    public static int cropH = 100;
-    public static int cropL = 250;
+    public static int cropH = 150;
+    public static int cropL = 270;
     final double rowCount = 480;
 
     public SpikeDetector(boolean isBlue) {
         if (isBlue) {
             // Fill in numbers for blue
-            hue = 19;
-            saturation = 200;
-            volume = 150;
+            hue = 18;
+            saturation = 180;
+            value = 120;
 
             //hue = hue
             //saturation = saturation
@@ -44,7 +44,7 @@ public class SpikeDetector implements VisionProcessor {
         } else {
             hue = 120;
             saturation = 196;
-            volume = 176;
+            value = 176;
         }
     }
 
@@ -66,7 +66,7 @@ public class SpikeDetector implements VisionProcessor {
         Imgproc.cvtColor(cropbgr, hsv, Imgproc.COLOR_BGR2HSV);
 
 
-        Scalar min = new Scalar(Math.max(0, hue - 10), saturation - 50, volume - 50);
+        Scalar min = new Scalar(Math.max(0, hue - 10), saturation - 50, value - 50);
         Scalar max = new Scalar(hue + 10, 255, 255);
 
         Core.inRange(hsv, min, max, blackwhite); //turns the picture to black or white
