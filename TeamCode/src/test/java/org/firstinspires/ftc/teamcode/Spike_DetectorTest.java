@@ -25,7 +25,7 @@ public class Spike_DetectorTest extends TestCase {
     @Test
     public void testpic() {
 
-        int num = 3;
+        int num = 1;
         String color = "red";
         String file = color+num+".png";
 
