@@ -42,7 +42,7 @@ public class frontstage_red extends LinearOpMode {
     }
 
     public static int BACKDROP_STRAFE = 22;
-    public static int BACKDROP_DRIVE = 25;
+    public static int BACKDROP_DRIVE = 27;
 
     int targetSpike = 0;
 
@@ -97,15 +97,15 @@ public class frontstage_red extends LinearOpMode {
     void spike1() {
         driver.drive(RED_S1.first_drive, 0); //drives to middle section
         driver.turn(SOUTH); //turns to left spike
-        driver.drive(-7, SOUTH); //backs closer to spike (maybe not needed)
+        driver.drive(-6, SOUTH); //backs closer to spike (maybe not needed)
         intake.setPower(-1);//feeder spits out pixel
         sleep(1000); //waits so that pixel comes out smoothly
         intake.setPower(0);
-        driver.drive(4, SOUTH); //goes back to previous area
+        driver.drive(2, SOUTH); //goes back to previous area
         driver.turn(0); //turns to the middle of field
         driver.drive(RED_S1.second_drive, 0); //drives up to the raising area
         driver.turn(SOUTH); //drives forward, closer to backdrop
-        driver.drive(103,SOUTH);
+        driver.drive(100,SOUTH);
     }
 
     void spike2() {
@@ -115,14 +115,14 @@ public class frontstage_red extends LinearOpMode {
         intake.setPower(0);
         driver.drive(RED_S2.second_drive, 0); //drive out of the way of the bar
         driver.turn(SOUTH); //drives forward, closer to backdrop
-        driver.drive(103,SOUTH);
+        driver.drive(100,SOUTH);
 
     }
 
     void spike3() {
         driver.drive(RED_S1.first_drive, 0); //drives to middle section
         driver.turn(NORTH); //turns to right spike
-        driver.drive(-7, NORTH); //backs closer to spike (maybe not needed)
+        driver.drive(-3, NORTH); //backs closer to spike (maybe not needed)
         intake.setPower(-1);//feeder spits out pixel
         sleep(1000); //waits so that pixel comes out smoothly
         intake.setPower(0);
@@ -130,7 +130,7 @@ public class frontstage_red extends LinearOpMode {
         driver.turn(0); //turns to the middle of field
         driver.drive(RED_S1.second_drive, 0); //drives up to the raising area
         driver.turn(SOUTH); //drives forward, closer to backdrop
-        driver.drive(103,SOUTH);
+        driver.drive(100,SOUTH);
 
     }
 

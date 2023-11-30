@@ -42,7 +42,7 @@ public class frontstage_blue extends LinearOpMode {
     }
 
     public static int BACKDROP_STRAFE = -25;
-    public static int BACKDROP_DRIVE = 25;
+    public static int BACKDROP_DRIVE = 26;
 
     int targetSpike = 0;
 

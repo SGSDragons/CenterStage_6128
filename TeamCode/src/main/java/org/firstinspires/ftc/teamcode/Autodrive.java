@@ -74,7 +74,7 @@ public class Autodrive {
 
         float targetPosition = startingPosition + ticksDistance;
 
-        int error = targetPosition - startingPosition;
+        double error = targetPosition - startingPosition;
 
         // Stop when roughly within one quarter of an inch.
         while (keepRunning.get() && Math.abs(error) > TICKS_PER_INCH ) {

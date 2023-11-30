@@ -42,7 +42,7 @@ public class backstage_red extends LinearOpMode {
     }
 
     public static int BACKDROP_STRAFE = 28;
-    public static int BACKDROP_DRIVE = 24;
+    public static int BACKDROP_DRIVE = 29;
 
     int targetSpike = 0;
 
@@ -101,11 +101,11 @@ public class backstage_red extends LinearOpMode {
         intake.setPower(-1);//feeder spits out pixel
         sleep(1000); //waits so that pixel comes out smoothly
         intake.setPower(0);
-        driver.drive(5, SOUTH); //goes back to previous area
+        driver.drive(7, SOUTH); //goes back to previous area
         driver.turn(0); //turns to the middle of field
         driver.drive(RED_S1.second_drive, 0); //drives up to the raising area
         driver.turn(SOUTH); //drives forward, closer to backdrop
-        driver.drive(32,SOUTH);
+        driver.drive(30,SOUTH);
     }
 
     void spike2() {
@@ -122,11 +122,11 @@ public class backstage_red extends LinearOpMode {
     void spike3() {
         driver.drive(RED_S1.first_drive, 0); //drives to middle section
         driver.turn(NORTH); //turns to right spike
-        driver.drive(-4, NORTH); //backs closer to spike (maybe not needed)
+        driver.drive(-2, NORTH); //backs closer to spike (maybe not needed)
         intake.setPower(-1);//feeder spits out pixel
         sleep(1000); //waits so that pixel comes out smoothly
         intake.setPower(0);
-        driver.drive(4, NORTH); //goes back to previous area
+        driver.drive(2, NORTH); //goes back to previous area
         driver.turn(0); //turns to the middle of field
         driver.drive(RED_S1.second_drive, 0); //drives up to the raising area
         driver.turn(SOUTH); //drives forward, closer to backdrop
