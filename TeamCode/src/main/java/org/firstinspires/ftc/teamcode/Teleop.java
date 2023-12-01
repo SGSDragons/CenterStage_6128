@@ -58,6 +58,8 @@ public class Teleop extends LinearOpMode {
     private DcMotor Feeder = null;
     private DcMotor Conveyor = null;
     private Servo Launcher = null;
+    private DcMotor Lift = null;
+    private Servo Hook= null;
 
     public Autodrive driver;
 
@@ -77,6 +79,8 @@ public class Teleop extends LinearOpMode {
         Feeder = hardwareMap.get(DcMotor.class, "intake");
         Conveyor = hardwareMap.get(DcMotor.class, "conveyor");
         Launcher = hardwareMap.get(Servo.class, "launcher");
+        Lift = hardwareMap.get(DcMotor.class,"lift");
+        Hook = hardwareMap.get(Servo.class, "hook");
         IMU imu = hardwareMap.get(IMU.class, "imu");
 
 
@@ -124,6 +128,13 @@ public class Teleop extends LinearOpMode {
             if(gamepad1.dpad_down){
                 imu.resetYaw();
                 south = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+            }
+
+            if (gamepad2.a){
+                Lift.setPower(1);
+                sleep(500);
+            }if (gamepad2.b){
+                Hook.setPosition(0.2);
             }
 
             if(gamepad1.dpad_up){
