@@ -30,22 +30,19 @@
 package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
+import com.acmerobotics.dashboard.config.Config;
 import com.acmerobotics.dashboard.telemetry.TelemetryPacket;
-import com.qualcomm.robotcore.eventloop.opmode.Disabled;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import com.qualcomm.robotcore.hardware.DcMotor;
-import com.qualcomm.robotcore.hardware.DcMotorSimple;
 import com.qualcomm.robotcore.hardware.IMU;
 import com.qualcomm.robotcore.util.ElapsedTime;
-import com.qualcomm.robotcore.util.Range;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.checkerframework.checker.units.qual.A;
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
 
 @TeleOp(name="6128Teleop", group="Linear OpMode")
-
+@Config
 public class Teleop extends LinearOpMode {
 
     // Declare OpMode members.
@@ -58,11 +55,11 @@ public class Teleop extends LinearOpMode {
     private DcMotor Feeder = null;
     private DcMotor Conveyor = null;
     private Servo Launcher = null;
-    private DcMotor Lift = null;
-    private Servo Hook= null;
+    private DcMotor LiftRight = null;
+    private Servo Hook = null;
+    private DcMotor LiftLeft = null;
 
-    public Autodrive driver;
-
+    public static double BRAKING_FORCE = 0.75;
 
     @Override
     public void runOpMode() {
@@ -79,8 +76,9 @@ public class Teleop extends LinearOpMode {
         Feeder = hardwareMap.get(DcMotor.class, "intake");
         Conveyor = hardwareMap.get(DcMotor.class, "conveyor");
         Launcher = hardwareMap.get(Servo.class, "launcher");
-        Lift = hardwareMap.get(DcMotor.class,"lift");
+        LiftRight = hardwareMap.get(DcMotor.class,"liftright");
         Hook = hardwareMap.get(Servo.class, "hook");
+        LiftLeft = hardwareMap.get(DcMotor.class, "liftleft");
         IMU imu = hardwareMap.get(IMU.class, "imu");
 
 
@@ -94,16 +92,17 @@ public class Teleop extends LinearOpMode {
         Feeder.setDirection(DcMotor.Direction.FORWARD);
         Conveyor.setDirection(DcMotor.Direction.FORWARD);
         Launcher.setDirection(Servo.Direction.REVERSE);
+        Hook.setDirection(Servo.Direction.FORWARD);
 
         waitForStart();
         runtime.reset();
 
-        driver = new Autodrive(hardwareMap, this::opModeIsActive);
+        final double hookDownPosition = 0;
+        final double hookUpPosition = 0.7;
+
         imu.resetYaw();
 
-        double south = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-        double angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-
+        Hook.setPosition(hookDownPosition);
         while (opModeIsActive()) {
 
             double max;
@@ -111,39 +110,49 @@ public class Teleop extends LinearOpMode {
             double axial = -gamepad1.left_stick_y;
             double lateral = gamepad1.left_stick_x;
             double yaw  =  gamepad1.right_stick_x;
-            double feed = gamepad2.right_stick_y;
-            double convey = gamepad2.left_stick_y;
+            double feedPower = gamepad2.right_stick_y;
+            double conveyorPower = -gamepad2.left_stick_y;
+
+            if(gamepad1.dpad_down){
+                imu.resetYaw();
+            }
+
+            if(gamepad1.right_bumper){
+                double angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+                yaw = -angle/90;
+            }
 
             double leftFrontPower  = axial + lateral + yaw;
             double rightFrontPower = axial - lateral - yaw;
             double leftBackPower   = axial - lateral + yaw;
             double rightBackPower  = axial + lateral - yaw;
-            double FeedPower  = feed;
-            double ConveyorPower = -convey;
 
             max = Math.max(Math.abs(leftFrontPower), Math.abs(rightFrontPower));
             max = Math.max(max, Math.abs(leftBackPower));
             max = Math.max(max, Math.abs(rightBackPower));
 
-            if(gamepad1.dpad_down){
-                imu.resetYaw();
-                south = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+            if (gamepad1.a){
+                LiftRight.setPower(1);
+                LiftLeft.setPower(-1);
+                sleep(1500);
+                LiftRight.getZeroPowerBehavior();
+                LiftLeft.getZeroPowerBehavior();
+                LiftRight.setPower(0); //necessary?
+                LiftLeft.setPower(0); //necessary?
             }
 
-            if (gamepad2.a){
-                Lift.setPower(1);
-                sleep(500);
-            }if (gamepad2.b){
-                Hook.setPosition(0.2);
+            if (gamepad1.b){
+                Hook.setPosition(hookUpPosition);
             }
-
-            if(gamepad1.dpad_up){
-                angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-                if (angle > 0){
-                    driver.turn(south+7);
-                }else if (angle < 0){
-                    driver.turn(-south);
-                }
+            if (gamepad1.x) {
+                Hook.setPosition(hookDownPosition);
+            }
+            if (gamepad1.y) {
+                LiftRight.setPower(-1);
+                LiftLeft.setPower(1);
+                sleep(190);
+                LiftLeft.setPower(0);
+                LiftRight.setPower(0);
             }
 
             if (max > 1.0) {
@@ -153,13 +162,14 @@ public class Teleop extends LinearOpMode {
                 rightBackPower  /= max;
             }
 
-            // Send calculated power to wheels
-            leftFrontDrive.setPower(leftFrontPower/1.5);
-            leftBackDrive.setPower(leftBackPower/1.5);
-            rightFrontDrive.setPower(rightFrontPower/1.5);
-            rightBackDrive.setPower(rightBackPower/1.5);
-            Feeder.setPower(FeedPower);
-            Conveyor.setPower(ConveyorPower);
+            // Send calculated power to wheels. Make the trigger act like a brake.
+            double breakingForce = (1 - gamepad1.right_trigger*BRAKING_FORCE);
+            leftFrontDrive.setPower(leftFrontPower * breakingForce);
+            leftBackDrive.setPower(leftBackPower * breakingForce);
+            rightFrontDrive.setPower(rightFrontPower * breakingForce);
+            rightBackDrive.setPower(rightBackPower * breakingForce);
+            Feeder.setPower(feedPower);
+            Conveyor.setPower(conveyorPower);
 
             if(gamepad2.y) {
                 Launcher.setPosition(0);

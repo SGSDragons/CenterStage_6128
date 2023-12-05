@@ -34,9 +34,9 @@ public class SpikeDetector implements VisionProcessor {
     public SpikeDetector(boolean isBlue) {
         if (isBlue) {
             // Fill in numbers for blue
-            hue = 18;
-            saturation = 180;
-            value = 120;
+            hue = 15;
+            saturation = 190;
+            value = 110;
 
             //hue = hue
             //saturation = saturation
@@ -44,7 +44,7 @@ public class SpikeDetector implements VisionProcessor {
         } else {
             hue = 120;
             saturation = 196;
-            value = 176;
+            value = 130;
         }
     }
 
