@@ -98,7 +98,8 @@ public class Teleop extends LinearOpMode {
         runtime.reset();
 
         final double hookDownPosition = 0;
-        final double hookUpPosition = 0.7;
+        final double hookUpPosition = 1;
+        final double hookFinalPosition = 0.5;
 
         imu.resetYaw();
 
@@ -146,6 +147,9 @@ public class Teleop extends LinearOpMode {
             }
             if (gamepad1.x) {
                 Hook.setPosition(hookDownPosition);
+            }
+            if (gamepad1.left_bumper) {
+                Hook.setPosition(hookFinalPosition);
             }
             if (gamepad1.y) {
                 LiftRight.setPower(-1);
