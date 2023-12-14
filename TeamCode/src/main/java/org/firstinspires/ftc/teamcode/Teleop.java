@@ -40,7 +40,6 @@ import com.qualcomm.robotcore.util.ElapsedTime;
 import com.qualcomm.robotcore.hardware.Servo;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
-
 @TeleOp(name="6128Teleop", group="Linear OpMode")
 @Config
 public class Teleop extends LinearOpMode {
@@ -103,6 +102,9 @@ public class Teleop extends LinearOpMode {
 
         imu.resetYaw();
 
+        double south = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
+        double breakingForce = 1;
+
         Hook.setPosition(hookDownPosition);
         while (opModeIsActive()) {
 
@@ -116,11 +118,16 @@ public class Teleop extends LinearOpMode {
 
             if(gamepad1.dpad_down){
                 imu.resetYaw();
+                south = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
             }
 
             if(gamepad1.right_bumper){
                 double angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-                yaw = -angle/90;
+                if (angle < south){
+                    yaw = (angle-15)/90;
+                }if (angle > south) {
+                    yaw = (angle+4)/90;
+                }
             }
 
             double leftFrontPower  = axial + lateral + yaw;
@@ -167,7 +174,7 @@ public class Teleop extends LinearOpMode {
             }
 
             // Send calculated power to wheels. Make the trigger act like a brake.
-            double breakingForce = (1 - gamepad1.right_trigger*BRAKING_FORCE);
+            breakingForce = (1 - gamepad1.right_trigger*BRAKING_FORCE);
             leftFrontDrive.setPower(leftFrontPower * breakingForce);
             leftBackDrive.setPower(leftBackPower * breakingForce);
             rightFrontDrive.setPower(rightFrontPower * breakingForce);
