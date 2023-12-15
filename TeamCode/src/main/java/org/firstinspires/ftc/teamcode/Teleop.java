@@ -116,7 +116,7 @@ public class Teleop extends LinearOpMode {
             double feedPower = gamepad2.right_stick_y;
             double conveyorPower = -gamepad2.left_stick_y;
 
-            if(gamepad1.dpad_down){
+            if(gamepad1.dpad_up){
                 imu.resetYaw();
                 south = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
             }
@@ -126,7 +126,7 @@ public class Teleop extends LinearOpMode {
                 if (angle < south){
                     yaw = (angle-15)/90;
                 }if (angle > south) {
-                    yaw = (angle+4)/90;
+                    yaw = (angle+5)/90;
                 }
             }
 
