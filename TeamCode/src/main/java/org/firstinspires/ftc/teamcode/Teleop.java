@@ -123,9 +123,9 @@ public class Teleop extends LinearOpMode {
 
             if(gamepad1.right_bumper){
                 double angle = imu.getRobotYawPitchRollAngles().getYaw(AngleUnit.DEGREES);
-                if (angle < south){
+                if (angle < south && (angle-15)/90 < -0.2){
                     yaw = (angle-15)/90;
-                }if (angle > south) {
+                }if (angle > south && (angle+5)/90 > 0.2){
                     yaw = (angle+5)/90;
                 }
             }

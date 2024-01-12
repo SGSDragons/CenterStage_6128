@@ -37,8 +37,8 @@ public class frontstage_blue extends LinearOpMode {
 
     @Config
     public static class BLUE_S2 {
-        public static int first_drive = 63;
-        public static int second_drive = 10;
+        public static int first_drive = 64;
+        public static int second_drive = 8;
     }
 
     public static int BACKDROP_STRAFE = -25;
@@ -105,7 +105,7 @@ public class frontstage_blue extends LinearOpMode {
         driver.turn(0); //turns to the middle of field
         driver.drive(BLUE_S1.second_drive, 0); //drives up to the raising area
         driver.turn(SOUTH); //drives forward, closer to backdrop
-        driver.drive(105,SOUTH);
+        driver.drive(108,SOUTH);
     }
 
     void spike2() {
@@ -122,11 +122,11 @@ public class frontstage_blue extends LinearOpMode {
     void spike3() {
         driver.drive(BLUE_S1.first_drive, 0); //drives to middle section
         driver.turn(SOUTH); //turns to right spike
-        driver.drive(-4, SOUTH); //backs closer to spike (maybe not needed)
+        driver.drive(-3, SOUTH); //backs closer to spike (maybe not needed)
         intake.setPower(-1);//feeder spits out pixel
         sleep(1000); //waits so that pixel comes out smoothly
         intake.setPower(0);
-        driver.drive(3, SOUTH); //goes back to previous area
+        driver.drive(2, SOUTH); //goes back to previous area
         driver.turn(0); //turns to the middle of field
         driver.drive(BLUE_S1.second_drive, 0); //drives up to the raising area
         driver.turn(SOUTH); //drives forward, closer to backdrop
