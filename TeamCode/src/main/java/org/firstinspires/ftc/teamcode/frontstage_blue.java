@@ -32,7 +32,7 @@ public class frontstage_blue extends LinearOpMode {
     public static class BLUE_S1 {
 
         public static int first_drive = 40;
-        public static int second_drive = 35;
+        public static int second_drive = 32;
     }
 
     @Config
@@ -115,14 +115,13 @@ public class frontstage_blue extends LinearOpMode {
         intake.setPower(0);
         driver.drive(BLUE_S2.second_drive, 0); //drive out of the way of the bar
         driver.turn(SOUTH); //drives forward, closer to backdrop
-        driver.drive(98,SOUTH);
+        driver.drive(102,SOUTH);
 
     }
 
     void spike3() {
         driver.drive(BLUE_S1.first_drive, 0); //drives to middle section
         driver.turn(SOUTH); //turns to right spike
-        driver.drive(-3, SOUTH); //backs closer to spike (maybe not needed)
         intake.setPower(-1);//feeder spits out pixel
         sleep(1000); //waits so that pixel comes out smoothly
         intake.setPower(0);
